@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenNode Interview Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GreenNode Interview Assistant</h1>
+        <p class="subtitle">Live Transcription + AI Assessment</p>
+    </header>
+
+    <main>
+        <!-- Step 1: Upload Documents -->
+        <section class="panel">
+            <h2>Step 1 — Upload Documents</h2>
+            <div class="upload-grid">
+                <div class="upload-box" id="jd-drop" onclick="document.getElementById('jd-upload').click()">
+                    <input type="file" id="jd-upload" accept=".pdf,.docx,.txt" onchange="handleJDUpload(this)" hidden>
+                    <div class="upload-icon">JD</div>
+                    <div class="upload-label">Upload Job Description</div>
+                    <div class="upload-hint">PDF, DOCX, or TXT</div>
+                    <div id="jd-filename" class="upload-filename"></div>
+                </div>
+                <div class="upload-box" id="cv-drop" onclick="document.getElementById('cv-upload').click()">
+                    <input type="file" id="cv-upload" accept=".pdf,.docx,.txt" onchange="handleCVUpload(this)" hidden>
+                    <div class="upload-icon">CV</div>
+                    <div class="upload-label">Upload Candidate CV</div>
+                    <div class="upload-hint">PDF, DOCX, or TXT</div>
+                    <div id="cv-filename" class="upload-filename"></div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:10px">
+                <label for="jd-text">Or paste JD text</label>
+                <textarea id="jd-text" rows="2" placeholder="E.g. Tôi đang tuyển Applied AI Intern từ sinh viên năm 3-4, tập trung vào LLM, RAG, AI Agent..."></textarea>
+                <button class="btn btn-outline btn-sm" onclick="extractFromJDText()" style="margin-top:6px">Extract from JD text</button>
+            </div>
+        </section>
+
+        <!-- Step 2: Interview Info (auto-filled from documents) -->
+        <section class="panel">
+            <h2>Step 2 — Interview Info</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="candidate-name">Candidate Name</label>
+                    <input type="text" id="candidate-name" placeholder="Auto-filled from CV">
+                </div>
+                <div class="form-group">
+                    <label for="position">Position</label>
+                    <input type="text" id="position" placeholder="Auto-filled from JD">
+                </div>
+                <div class="form-group">
+                    <label for="interviewer">Interviewer</label>
+                    <input type="text" id="interviewer" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="language">Language</label>
+                    <select id="language">
+                        <option value="vi" selected>Vietnamese</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ws-url">Whisper Server</label>
+                    <input type="text" id="ws-url" value="ws://localhost:9090">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1">
+                    <label for="vocab-hints">Vocabulary Hints (technical terms for Whisper accuracy)</label>
+                    <input type="text" id="vocab-hints" placeholder="Auto-filled from JD. E.g.: RAG, AI Agent, LLM, Prompt Engineering, LangChain, Vector Database">
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Generate Questions -->
+        <section class="panel">
+            <h2>Step 3 — Interview Questions</h2>
+            <button id="btn-generate-questions" class="btn btn-primary" onclick="generateQuestions()" disabled>
+                Generate Interview Questions from CV + JD
+            </button>
+            <div id="generated-questions" class="generated-questions" style="display:none"></div>
+        </section>
+
+        <!-- Step 4: Interview Controls -->
+        <section class="panel">
+            <h2>Step 4 — Interview</h2>
+            <div class="controls">
+                <button id="btn-start" class="btn btn-primary" onclick="startRecording()">
+                    Start Recording
+                </button>
+                <button id="btn-stop" class="btn btn-danger" onclick="stopRecording()" disabled>
+                    Stop Recording
+                </button>
+                <span class="controls-divider"></span>
+                <label class="btn btn-outline">
+                    Upload Audio File
+                    <input type="file" id="file-upload" accept="audio/*,.wav,.mp3,.m4a,.webm,.ogg" onchange="uploadAudioFile(this)" hidden>
+                </label>
+                <span class="controls-divider"></span>
+                <button id="btn-save-transcript" class="btn btn-outline" onclick="saveTranscript()" disabled>
+                    Save Transcript
+                </button>
+                <span class="controls-divider"></span>
+                <button id="btn-assess" class="btn btn-accent" onclick="runAssessment()" disabled>
+                    Generate Assessment
+                </button>
+                <button id="btn-download" class="btn btn-success" onclick="downloadExcel()" disabled style="display:none">
+                    Download Excel
+                </button>
+            </div>
+            <div id="status" class="status">Ready</div>
+            <div id="timer" class="timer" style="display:none">00:00:00</div>
+        </section>
+
+        <!-- Step 5: Transcript + Assessment -->
+        <div class="two-col">
+            <section class="panel">
+                <h2>Transcript <span id="segment-count" class="segment-count"></span></h2>
+                <div id="transcript" class="transcript-area">
+                    <p class="placeholder">Transcript will appear here...</p>
+                </div>
+            </section>
+            <section class="panel">
+                <h2>Assessment Result</h2>
+                <div id="assessment" class="assessment-area">
+                    <p class="placeholder">Assessment will appear here...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

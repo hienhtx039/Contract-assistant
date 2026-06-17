@@ -1,0 +1,17 @@
+.env
+.env.*
+.greennode.json
+.agentbase/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+*.md
+greennode-agentbase-skills/
+scripts/
+docs/
+tests/
+Audio-Transcription-Chrome/
+Audio-Transcription-Firefox/
+Audio-Transcription-iOS/

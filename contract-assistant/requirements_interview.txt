@@ -1,0 +1,16 @@
+# Core dependencies for Interview Assistant
+# (WhisperLive dependencies are in requirements/server.txt)
+fastapi>=0.100.0
+uvicorn>=0.23.0
+openpyxl>=3.1.0
+requests>=2.31.0
+soundfile>=0.12.0
+numpy<2
+websockets>=12.0
+python-multipart>=0.0.6
+python-dotenv>=1.0.0
+python-docx
+PyPDF2>=3.0.0
+openai>=1.40.0
+pandas>=2.2.0
+streamlit>=1.36.0
